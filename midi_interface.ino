@@ -10,11 +10,11 @@
  * to convert the MIDI din signal to
  * a uart compatible signal
  */
-#define RXD2 16 /* U2RRXD */
+#define RXD2 22 /* U2RRXD */
 #define TXD2 17
 
 /* use define to dump midi data */
-//#define DUMP_SERIAL2_TO_SERIAL
+#define DUMP_SERIAL2_TO_SERIAL
 
 /* constant to normalize midi value to 0.0 - 1.0f */
 #define NORM127MUL	0.007874f
@@ -106,7 +106,7 @@ inline void Midi_ControlChange(uint8_t channel, uint8_t data1, uint8_t data2)
 #if 0 /* use this to identify cc messages */
     Serial.printf("CC %x %02x %02x\n", channel, data1, data2);
 #endif
-    if (data1 == 17)
+    if (data1 == 7) //data slider
     {
         if (channel < 10)
         {
@@ -118,12 +118,12 @@ inline void Midi_ControlChange(uint8_t channel, uint8_t data1, uint8_t data2)
         Synth_SetSlider(8,  data2 * NORM127MUL);
     }
 
-    if ((data1 == 16) && (channel < 9))
+    if ((data1 == 15) && (channel < 9)) //speed pot 6
     {
         Synth_SetRotary(channel, data2 * NORM127MUL);
 
     }
-    if ((data1 == 18) && (channel == 0))
+    if ((data1 == 16) && (channel == 0))
     {
         Synth_SetRotary(8,  data2 * NORM127MUL);
     }
@@ -190,7 +190,7 @@ void Midi_Process()
         uint8_t incomingByte = Serial2.read();
 
 #ifdef DUMP_SERIAL2_TO_SERIAL
-        Serial.printf("%02x", incomingByte);
+        //Serial.printf("%02x", incomingByte);
 #endif
         /* ignore live messages */
         if ((incomingByte & 0xF0) == 0xF0)
@@ -238,4 +238,3 @@ void Midi_Process()
     }
 
 }
-
