@@ -4,7 +4,7 @@
  * Author: Marcel Licence
  */
 
-#define LED_PIN 	2
+#define LED_PIN 	19
 
 
 inline
