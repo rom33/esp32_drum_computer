@@ -10,7 +10,7 @@
  * to convert the MIDI din signal to
  * a uart compatible signal
  */
-#define RXD2 22 /* U2RRXD */
+#define RXD2 21 /* U2RRXD */
 #define TXD2 17
 
 /* use define to dump midi data */

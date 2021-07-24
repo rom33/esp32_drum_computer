@@ -11,6 +11,8 @@
 #include <WiFi.h>
 
 #define SAMPLE_RATE	44100
+#define LED_PIN   19
+#define LED2_PIN  22 
 
 /* to avoid the high click when turning on the microphone */
 static float click_supp_gain = 0.0f;
@@ -21,8 +23,9 @@ volatile uint8_t midi_prescaler = 0;
 void setup()
 {
   // put your setup code here, to run once:
-  delay(500);
-
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(LED2_PIN,OUTPUT);
+  
   Serial.begin(115200);
 
   Serial.println();
@@ -32,8 +35,6 @@ void setup()
   Serial.printf("Firmware started successfully\n");
 
   click_supp_gain = 0.0f;
-
-  Blink_Setup();
 
   ac101_setup();
 
@@ -76,14 +77,6 @@ inline void audio_task()
   }
 }
 
-
-inline
-void loop_1Hz(void)
-{
-  Blink_Process();
-}
-
-
 void loop()
 {
 
@@ -95,7 +88,6 @@ void loop()
   if (loop_cnt >= SAMPLE_RATE)
   {
     loop_cnt = 0;
-    loop_1Hz();
   }
 
   midi_prescaler++;
