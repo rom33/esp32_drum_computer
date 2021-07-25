@@ -19,17 +19,22 @@
 /* constant to normalize midi value to 0.0 - 1.0f */
 #define NORM127MUL	0.007874f
 
+bool seq_click = true;
+bool seq_active = true;
+
 inline void Midi_NoteOn(uint8_t note, uint8_t vol)
 {
-    //Sampler_NoteOn(note, vol);
+    if(!seq_active) Sampler_NoteOn(note, vol);
+    else{
     Sequencer_NoteOn(note, vol);
     Sampler_SelectNote(note);
+}
 }
 
 inline void Midi_NoteOff(uint8_t note)
 {
-    //Sampler_NoteOff(note);
-    Sequencer_NoteOff(note);
+    if(!seq_active) Sampler_NoteOff(note);
+    else Sequencer_NoteOff(note);
 }
 
 struct midiControllerMapping
@@ -45,8 +50,8 @@ struct midiControllerMapping
 struct midiControllerMapping edirolMapping[] =
 {
     { 0x8, 0x52, "back", NULL},
-    { 0xD, 0x52, "stop", Sequencer_Stop},
-    { 0xe, 0x52, "start", Sequencer_Start},
+    { 0x0, 0x01, "stop", Sequencer_Stop},
+    { 0x0, 0x02, "start", Sequencer_Start},
     { 0xa, 0x52, "rec", NULL},
 
     /* upper row of buttons */
@@ -140,13 +145,22 @@ inline void HandleShortMsg(uint8_t *data)
     {
     /* note on */
     case 0x90:
-        if (data[2] > 0)
+        if (data[1] > 0x2f && data[1] <  0x3c && data[2] > 0)
         {
             Midi_NoteOn(data[1], data[2]);
         }
-        else
+        else if (data[1] > 0x2f && data[1] <  0x3c && data[2] == 0)
         {
             Midi_NoteOff(data[1]);
+        }
+        else if (data[1] > 0x3b && data[1] <  0x48 && data[2] > 0)
+        switch (data[1]){
+          case 0x3c:
+          seq_active = seq_active ? false : true;
+          break;
+          case 0x3e:
+          seq_click = seq_click ? false : true;
+          break;
         }
         break;
     /* note off */
