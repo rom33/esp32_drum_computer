@@ -57,8 +57,8 @@ void Sequencer_Init(void)
 
 uint32_t seq_prescaler = 60.0f * 44100.0f / (2.0f * SEQ_SUBSTEP_MUL * (float)DEFAULT_BPM);
 uint32_t seq_prescaler_next = 0;
-uint32_t seq_pos = 0;
-uint32_t seq_counter = 0;
+//uint32_t seq_pos = 0;
+//uint32_t seq_counter = 0;
 //bool seq_click = true;
 //bool seq_active = true;
 float seq_shuffle = 0.5;
