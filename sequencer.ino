@@ -127,7 +127,7 @@ void Sequencer_Tick(void)
 {
     uint8_t soloCnt = 0;
     if(seq_pos==0) digitalWrite(LED2_PIN, LOW); else digitalWrite(LED2_PIN, HIGH);
-    if(seq_pos%8==0) digitalWrite(LED_PIN, LOW); else digitalWrite(LED_PIN, HIGH);
+    if(seq_pos%8==0) {Serial.println("b");digitalWrite(LED_PIN, LOW);} else {Serial.println("n");digitalWrite(LED_PIN, HIGH);}
     seq_pos += 1;
     if (seq_pos >= ((SEQ_STEPS * 2) >> step_divider))
     {
